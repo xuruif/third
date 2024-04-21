@@ -1,0 +1,384 @@
+#include<string.h>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+struct projectgrade
+{
+    string name;
+    int p50;
+    int p100;
+    int p200;
+    int p400;
+    int p1500;
+    int pjumphigh;
+    int pjumpfar;
+    int pbiaoqiang;
+    int pqianqiu;
+    int ptiebing;
+}a[99];
+int collegenum, projectnum;     //学院个数，项目个数
+int  sumscore[1100];//团体总成绩
+
+void menu()//菜单函数
+{
+
+    cout << "                   ------------------------欢迎使用运动会成绩管理系统-------------------------------" << endl;
+    cout << "                   ------------------------1.各院系代表团总成绩排名---------------------------------" << endl;
+    cout << "                   ------------------------2.各院系代表队团体总成绩---------------------------------" << endl;
+    cout << "                   ------------------------3.50米跑步各院系得分及排名-------------------------------" << endl;
+    cout << "                   ------------------------4.100米跑步各院系得分及排名------------------------------" << endl;
+    cout << "                   ------------------------5.200米跑步各院系得分及排名------------------------------" << endl;
+    cout << "                   ------------------------6.400米跑步各院系得分及排名------------------------------" << endl;
+    cout << "                   ------------------------7.1500米跑步各院系得分及排名-----------------------------" << endl;
+    cout << "                   ------------------------8.跳高各院系得分及排名-----------------------------------" << endl;
+    cout << "                   ------------------------9.跳远各院系得分及排名-----------------------------------" << endl;
+    cout << "                   ------------------------10.标枪各院系得分及排名----------------------------------" << endl;
+    cout << "                   ------------------------11.铅球各院系得分及排名----------------------------------" << endl;
+    cout << "                   ------------------------12.铁饼各院系得分及排名----------------------------------" << endl;
+    cout << "                   ------------------------13.按院系查询--------------------------------------------" << endl;
+    cout << "                   ------------------------14.按项目查询--------------------------------------------" << endl;
+    cout << "                   ------------------------15.修改项目成绩------------------------------------------" << endl;
+    cout << "                   ------------------------0.退出系统-----------------------------------------------" << endl;
+    cout << endl;
+    cout << "        输入你的选择： ";
+}
+void getdata()//初始化函数
+{
+    cout << "             ---------------------------------初始化，开始录入信息--------------------------------------" << endl;
+    cout << "请输入学院个数： ";
+    cin >> collegenum;
+    cout << "请输入学院名称： ";
+    for (int i = 0; i < collegenum; i++)
+    {
+        cin >> a[i].name;
+    }
+    for (int i = 0; i < collegenum; i++)
+    {
+        cout << "请输入" << a[i].name << "的各项成绩: " << endl;
+        cout << "50米: ";
+        cin >> a[i].p50;
+        cout << "100米：";
+        cin >> a[i].p100;
+        cout << "200米: ";
+        cin >> a[i].p200;
+        cout << "400米: ";
+        cin >> a[i].p400;
+        cout << "1500米: ";
+        cin >> a[i].p1500;
+        cout << "跳高: ";
+        cin >> a[i].pjumphigh;
+        cout << "跳远: ";
+        cin >> a[i].pjumpfar;
+        cout << "标枪: ";
+        cin >> a[i].pbiaoqiang;
+        cout << "铅球: ";
+        cin >> a[i].pqianqiu;
+        cout << "铁饼: ";
+        cin >> a[i].ptiebing;
+    }
+}
+void sumgrade()//总成绩
+{
+    for (int i = 0; i < collegenum; i++)
+    {
+        sumscore[i] = a[i].p50 + a[i].p100 + a[i].p200 + a[i].p400 + a[i].p1500 + a[i].pjumphigh + a[i].pjumpfar + a[i].pbiaoqiang + a[i].pqianqiu + a[i].ptiebing;
+    }
+}
+void sumprint1()//总成绩排名
+{
+    int t = 0;
+    projectgrade test;
+    for (int i = 0; i < collegenum; i++)
+    {
+        for (int j = 0; j < collegenum - 1 - i; j++)
+        {
+            if (sumscore[j + 1] > sumscore[j])
+            {
+                t = sumscore[j];
+                sumscore[j] = sumscore[j + 1];
+                sumscore[j + 1] = t;
+                test = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = test;
+            }
+        }
+    }
+    cout << "     排名：";
+    for (int i = 0; i < collegenum; i++)
+    {
+        cout << "    " << a[i].name << endl;
+    }
+}
+void sum()//各学院总成绩
+{
+    for (int i = 0; i < collegenum; i++)
+    {
+        cout << "     " << a[i].name << "总分: " << sumscore[i] << endl;
+    }
+}
+bool cmp1(projectgrade& A, projectgrade& B)
+{
+    return A.p50 > B.p50;
+}
+bool cmp2(projectgrade& A, projectgrade& B)
+{
+    return A.p100 > B.p100;
+}
+bool cmp3(projectgrade& A, projectgrade& B)
+{
+    return A.p200 > B.p200;
+}
+bool cmp4(projectgrade& A, projectgrade& B)
+{
+    return A.p400 > B.p400;
+}
+bool cmp5(projectgrade& A, projectgrade& B)
+{
+    return A.p1500 > B.p1500;
+}
+bool cmp6(projectgrade& A, projectgrade& B)
+{
+    return A.pjumphigh > B.pjumphigh;
+}
+bool cmp7(projectgrade& A, projectgrade& B)
+{
+    return A.pjumpfar > B.pjumpfar;
+}
+bool cmp8(projectgrade& A, projectgrade& B)
+{
+    return A.pbiaoqiang > B.pbiaoqiang;
+}
+bool cmp9(projectgrade& A, projectgrade& B)
+{
+    return A.pqianqiu > B.pqianqiu;
+}
+bool cmp10(projectgrade& A, projectgrade& B)
+{
+    return A.ptiebing > B.ptiebing;
+}
+void projectprintf(int w)//单项成绩排名
+{
+    if (w == 3)
+    {
+        sort(a, a + collegenum, cmp1);
+    }
+    else if (w == 4)
+    {
+        sort(a, a + collegenum, cmp2);
+    }
+    else if (w == 5)
+    {
+        sort(a, a + collegenum, cmp3);
+    }
+    else if (w == 6)
+    {
+        sort(a, a + collegenum, cmp4);
+    }
+    else if (w == 7)
+    {
+        sort(a, a + collegenum, cmp5);
+    }
+    else if (w == 8)
+    {
+        sort(a, a + collegenum, cmp6);
+    }
+    else if (w == 9)
+    {
+        sort(a, a + collegenum, cmp7);
+    }
+    else if (w == 10)
+    {
+        sort(a, a + collegenum, cmp8);
+    }
+    else if (w == 11)
+    {
+        sort(a, a + collegenum, cmp9);
+    }
+    else if (w == 12)
+    {
+        sort(a, a + collegenum, cmp10);
+    }
+    int pp;
+    for (int i = 0; i < collegenum; i++)
+    {
+        pp = w - 2;
+        switch (pp)
+        {
+        case 1:cout << "    " << a[i].name << " " << a[i].p50 << endl; break;
+        case 2:cout << "    " << a[i].name << " " << a[i].p100 << endl; break;
+        case 3:cout << "    " << a[i].name << " " << a[i].p200 << endl; break;
+        case 4:cout << "    " << a[i].name << " " << a[i].p400 << endl; break;
+        case 5:cout << "    " << a[i].name << " " << a[i].p1500 << endl; break;
+        case 6:cout << "    " << a[i].name << " " << a[i].pjumphigh << endl; break;
+        case 7:cout << "    " << a[i].name << " " << a[i].pjumpfar << endl; break;
+        case 8:cout << "    " << a[i].name << " " << a[i].pbiaoqiang << endl; break;
+        case 9:cout << "    " << a[i].name << " " << a[i].pqianqiu << endl; break;
+        case 10:cout << "    " << a[i].name << " " << a[i].ptiebing << endl; break;
+        }
+    }
+}
+void consultbycollegename()//按院系查询
+{
+    string w;
+    int t;
+    int m;
+    cout << "       请输入院系： ";
+    cin >> w;
+    cout << endl;
+    int i = 0;
+    for (; i < collegenum; i++)
+    {
+        if (w == a[i].name)
+        {
+            t = i;
+            break;
+        }
+    }
+    if (i == collegenum)
+    {
+        cout << "     您输入的学院有误，不存在!!!!!" << endl;
+        return;
+    }
+    cout << "        请输入项目序号:(按照1.50米,2.100米,3.200米,4.400米,5.1500米,6.跳高,7.跳远,8.标枪,9.铅球,10.铁饼)" << endl;
+    cin >> m;
+    if (m < 1 || m>10)
+    {
+        cout << "     您输入的项目不存在！！!!!!" << endl;
+        return;
+    }
+    switch (m)
+    {
+    case 1:cout << "50米成绩为： " << a[t].p50 << endl; break;
+    case 2:cout << "100米成绩为： " << a[t].p100 << endl; break;
+    case 3:cout << "200米成绩为： " << a[t].p200 << endl; break;
+    case 4:cout << "400米成绩为： " << a[t].p400 << endl; break;
+    case 5:cout << "1500米成绩为： " << a[t].p1500 << endl; break;
+    case 6:cout << "跳高成绩为： " << a[t].pjumphigh << endl; break;
+    case 7:cout << "跳远成绩为： " << a[t].pjumpfar << endl; break;
+    case 8:cout << "标枪成绩为： " << a[t].pbiaoqiang << endl; break;
+    case 9:cout << "铅球成绩为： " << a[t].pqianqiu << endl; break;
+    case 10:cout << "铁饼成绩为： " << a[t].ptiebing << endl; break;
+    }
+}
+void cnosultbyproject()//按项目查询
+{
+    int o;
+    int t;
+    string w;
+    cout << "      请输入项目序号:(按照1.50米,2.100米,3.200米,4.400米,5.1500米,6.跳高,7.跳远,8.标枪,9.铅球,10.铁饼)" << endl;
+    cin >> o;
+    if (o < 1 || o>10)
+    {
+        cout << "     您输入的项目不存在！！" << endl;
+        return;
+    }
+    cout << endl;
+    cout << "     输入学院： ";
+    cin >> w;
+    cout << endl;
+    for (int i = 0; i < collegenum; i++)
+    {
+        if (w == a[i].name)
+        {
+            t = i;
+            switch (o)
+            {
+            case 1:cout << "   50米成绩为： " << a[t].p50 << endl; break;
+            case 2:cout << "   100米成绩为： " << a[t].p100 << endl; break;
+            case 3:cout << "   200米成绩为： " << a[t].p200 << endl; break;
+            case 4:cout << "    400米成绩为： " << a[t].p400 << endl; break;
+            case 5:cout << "   1500米成绩为： " << a[t].p1500 << endl; break;
+            case 6:cout << "    跳高成绩为： " << a[t].pjumphigh << endl; break;
+            case 7:cout << "   跳远成绩为： " << a[t].pjumpfar << endl; break;
+            case 8:cout << "   标枪成绩为： " << a[t].pbiaoqiang << endl; break;
+            case 9:cout << "   铅球成绩为： " << a[t].pqianqiu << endl; break;
+            case 10:cout << "    铁饼成绩为：  " << a[t].ptiebing << endl; break;
+            }
+        }
+    }
+}
+void revise()
+{
+    int c;
+    string w;
+    int ab;
+    cout << "    输入修改的项目所在院系： ";
+    cin >> w;
+    cout << endl;
+    cout << "     请输入项目序号:(按照1.50米,2.100米,3.200米,4.400米,5.1500米,6.跳高,7.跳远,8.标枪,9.铅球,10.铁饼)" << endl;
+    cout << endl;
+    cin >> c;
+    if (c < 1 || c>10)
+    {
+        cout << "     您输入的序号有误！！！" << endl;
+        return;
+    }
+    for (int i = 0; i < collegenum; i++)
+    {
+        if (w == a[i].name)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                if (c == j)
+                {
+                    cout << "    输入修改的值： ";
+                    cin >> ab;
+                    switch (c)
+                    {
+                    case 1:a[i].p50 = ab; break;
+                    case 2:a[i].p100 = ab; break;
+                    case 3:a[i].p200 = ab; break;
+                    case 4:a[i].p400 = ab; break;
+                    case 5:a[i].p1500 = ab; break;
+                    case 6:a[i].pjumphigh = ab; break;
+                    case 7:a[i].pjumpfar = ab; break;
+                    case 8:a[i].pbiaoqiang = ab; break;
+                    case 9:a[i].pqianqiu = ab; break;
+                    case 10:a[i].ptiebing = ab; break;
+                    }
+                }
+            }
+        }
+    }
+    cout << "     修改完毕！！！！" << endl;
+}
+int main()
+{
+    getdata();
+    cout << endl;
+    menu();
+    int choice;
+    string E;
+    cin >> choice;
+    while (choice != 0)
+    {
+        switch (choice)
+        {
+        case 1:sumgrade();
+            sumprint1(); break;
+        case 2:sum(); break;
+        case 3:projectprintf(3); break;
+        case 4:projectprintf(4); break;
+        case 5:projectprintf(5); break;
+        case 6:projectprintf(6); break;
+        case 7:projectprintf(7); break;
+        case 8:projectprintf(8); break;
+        case 9:projectprintf(9); break;
+        case 10:projectprintf(10); break;
+        case 11:projectprintf(11); break;
+        case 12:projectprintf(12); break;
+        case 13:consultbycollegename(); break;
+        case 14:cnosultbyproject(); break;
+        case 15:revise(); break;
+        }
+        cout << endl;
+        cout << endl;
+        menu();
+        cin >> choice;
+    }
+    if (choice == 0)
+    {
+        cout << "------------------------------------------------已退出系统！！！！------------------------------------------------------" << endl;
+    }
+    return 0;
+}
